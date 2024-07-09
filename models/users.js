@@ -1,62 +1,57 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
-const {checkEmailValidation,checkPhoneValidation}= require('../helpers/validations');
-
+const uniqueValidator = require("mongoose-unique-validator");
+const {
+	checkEmailValidation,
+	checkPhoneValidation,
+	checkUserNameValidation,
+} = require("../helpers/validations");
 
 const UserSchema = new Schema(
-  {
-    user_name: {
-      type:Schema.Types.String,
-      require:true
-    },
-  },
-  {
-    email: {
-      type:Schema.Types.String,
-      require:true,
-      unique:true,
-      validate: {
-        validator: checkEmailValidation,
-        message: props => `${props.value} is not a valid Email`
-    },
-    },
-  },
-  {
-    password: {
-      type:Schema.Types.String,
-      require:true
-    },
-  },
-  {
-    mobile: {
-      type:Schema.Types.Number,
-      require:true,
-      validate: {
-        validator: checkPhoneValidation,
-        message: props => `${props.value} is not a valid Phone Number`
-    },
-    },
-  },
-  {
-    ImageUrl: {
-      type:Schema.Types.String,
-    },
-  },
-  {
-    gender: {
-      type:Schema.Types.String,
-      enum : ['MALE','FEMALE','OTHERS'],
-      default: 'MALE'
-    },
-  },
-  {
-    birthDate:{
-      type:Schema.Types.Date
-    }
-  },
-  {
-    timestamps: true,
-  }
+	{
+		userName: {
+			type: Schema.Types.String,
+			unique: true,
+			required: true,
+		},
+		email: {
+			type: Schema.Types.String,
+			required: true,
+			unique: true,
+			validate: {
+				validator: checkEmailValidation,
+				message: (props) => `${props.value} is not a valid Email`,
+			},
+		},
+		password: {
+			type: Schema.Types.String,
+			required: true,
+		},
+		phone: {
+			type: Schema.Types.String,
+			required: true,
+			validate: {
+				validator: checkPhoneValidation,
+				message: (props) => `${props.value} is not a valid Phone Number`,
+			},
+		},
+		ImageUrl: {
+			type: Schema.Types.String,
+		},
+		gender: {
+			type: Schema.Types.String,
+			enum: ["MALE", "FEMALE", "OTHERS"],
+			default: "MALE",
+		},
+		birthDate: {
+			type: Schema.Types.Date,
+		},
+	},
+	{ timestamps: true }
 );
+UserSchema.plugin(uniqueValidator, {
+	message:
+		"Error, expected {PATH} to be unique. Value: {VALUE} is already in use.",
+});
 
-module.exports = mongoose.model("User", UserSchema,'users');
+module.exports = mongoose.model("User", UserSchema, "users");
