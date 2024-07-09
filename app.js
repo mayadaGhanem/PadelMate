@@ -1,39 +1,32 @@
 require("dotenv").config();
-var express = require("express");
+const mongoose = require("mongoose");
+const express= require('express');
+const router= express.Router();
+const bodyParser= require('body-parser');
 //var cors = require("cors");
 var app = express();
+const usersRouter= require('./routes/users');
 // app.use(cors);
-// const { MongoClient, ServerApiVersion } = require('mongodb');
-// const uri = process.env.DB_URL;
+const { MongoClient, ServerApiVersion } = require('mongodb');
+const uri = process.env.DB_URL;
+app.use(bodyParser.json());
 
-// // Create a MongoClient with a MongoClientOptions object to set the Stable API version
-// const client = new MongoClient(uri, {
-//   serverApi: {s
-//     version: ServerApiVersion.v1,
-//     strict: true,
-//     deprecationErrors: true,
-//   }
+mongoose
+  .connect(uri)
+  .then((res) =>
+    // listen to port 3030   +
+    {
+		// console.log(res,'res÷')
+		app.listen(5001);
+	}
+  )
+  .catch((e) => {
+    console.log(e);
+  });
+app.use("/users", usersRouter);
+router.get("/", function (req, res) {
+	res.redirect("/users");
+  });
+// var server = app.listen(5001, function () {
+// 	console.log("Express App running at http://127.0.0.1:5001/");
 // });
-
-// async function run() {
-//   try {
-//     // Connect the client to the server (optional starting in v4.7)
-//     await client.connect();
-//     // Send a ping to confirm a successful connection
-//     const db= await client.db('padel_mate');
-
-//   const res= await db.collection("users").find().toArray();
-//     // console.log("Pinged your deployment. You successfully connected to MongoDB!");
-//     console.log(res,'res');
-//   }catch(e) {
-//     // Ensures that the client will close when you finish/error
-//     console.log(e,'error')
-//   } finally {
-//     // Ensures that the client will clßose when you finish/error
-//     await client.close();
-//   }
-// }
-// run()
-var server = app.listen(5001, function () {
-	console.log("Express App running at http://127.0.0.1:5001/");
-});
