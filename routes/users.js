@@ -1,13 +1,21 @@
 const express = require("express");
 const router = express.Router();
+const verifyToken = require('../middlewares/auth');
 
 const {
 	getAllUsers,
 	createNewUser,
 	uploadAvatar,
+	login,
 } = require("../controllers/users");
 
-router.get("/", getAllUsers);
+//#region <Protected route> //
+
+router.get("/", verifyToken,getAllUsers);
+router.post("/uploadAvatar",verifyToken, uploadAvatar);
+
+//#endregion
+
 router.post("/signup", createNewUser);
-router.post("/uploadAvatar", uploadAvatar);
+router.post("/login", login);
 module.exports = router;
