@@ -35,7 +35,7 @@ const UserSchema = new Schema(
 				message: (props) => `${props.value} is not a valid Phone Number`,
 			},
 		},
-		ImageUrl: {
+		avatar: {
 			type: Schema.Types.String,
 		},
 		gender: {
