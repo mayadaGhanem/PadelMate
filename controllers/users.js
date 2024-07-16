@@ -77,7 +77,6 @@ module.exports = {
 	sendAvatar: async (req, res) => {
 		try {
 			const user = await User.findOne({ _id: req.userId }).exec();
-			console.log(user);
 			if (!user || !user.avatar) {
 				return res
 					.status(404)
@@ -85,7 +84,6 @@ module.exports = {
 			}
 
 			const avatarPath = user.avatar;
-			console.log(avatarPath);
 			res.sendFile(path.resolve(avatarPath));
 		} catch (e) {
 			res.status(500).send({ error: "An error occured" });
